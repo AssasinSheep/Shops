@@ -1,0 +1,23 @@
+name: Shop
+version: 1.2
+description: A simple shop based plugin
+author: RyujiX and AssasinTreepig
+main: shop.Main
+commands:
+    shop:
+      description: teleports you to the shop
+    playershops:
+      description: gives information about playershops
+Permissions:
+   shop.teleport:
+     default: op
+   shop.set:
+     default: op
+   shop.close:
+     default: op
+   shop.open:
+     default: op
+   shop.reload:
+     default: op
+   playershops.create:
+     default: op
