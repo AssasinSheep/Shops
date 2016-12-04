@@ -1,0 +1,14 @@
+shop:
+  x: 0
+  y: 0
+  z: 0
+  world: world
+messages:
+  successfully-set-shop: '&aSuccessfully set shop spawn point.'
+  arrived-to-shop: '&a&l(!) &cWelcome to the shop'
+  no-permission: '&cerror you do not have permission to use this command'
+  reload-config: '&athe config has been reloaded'
+  Invalid-command-used: '&4error please retry the command properly'
+  Created-player-shop: '&6sucsessfuly made a player shop'
+  Is-The-Shop-Closed: 'false'
+  Shops:
