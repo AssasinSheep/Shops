@@ -1,0 +1,63 @@
+package shops;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
+import org.bukkit.plugin.java.JavaPlugin;
+
+
+
+public class Playerdata {
+	
+	
+	private static File file;      //get custom file
+	private static FileConfiguration customFile;  //converting to file configuration object for bukkit
+	
+	public static void setup() {
+		
+		//generates custom config file
+		file = new File (Bukkit.getServer().getPluginManager().getPlugin("PlayerShops").getDataFolder(), "Playerdata.yml"); //getting directory for plugin
+		
+		if(!file.exists()) {  //if file doesn't exist make new file
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+
+			} 
+		}
+		
+		customFile = YamlConfiguration.loadConfiguration(file); //allows editing of file
+		
+
+		}
+	public static FileConfiguration get() {
+		return customFile;
+		
+	}
+	
+
+	public static void save() {
+		try {
+			customFile.save(file);
+		} catch (IOException e) {
+
+			System.out.println("Unable to save file");
+		}
+	}
+	
+	
+	
+	public static void reload() {
+		customFile = YamlConfiguration.loadConfiguration(file);
+	}
+}
