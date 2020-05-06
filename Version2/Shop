@@ -1,0 +1,112 @@
+package shops;
+
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+public class Shop implements CommandExecutor {
+ 
+	private PlayerShops plugin;   //constructor to get config 
+	public Shop(PlayerShops pl) { 
+		plugin = pl;  
+	
+
+	public boolean onCommand(CommandSender sender, Command cmd, String alias, String[] args) {	
+		if (cmd.getName().equalsIgnoreCase("shop")) {
+			if (args.length == 1) {
+				if (args[0].equalsIgnoreCase("set")) {
+					if (sender.isOp() || sender.hasPermission("shop.set")) {
+						Player player = (Player) sender; 
+						plugin.getConfig().set("shop.world", player.getWorld().getName());
+						plugin.getConfig().set("shop.x", Double.valueOf(player.getLocation().getX()));
+						plugin.getConfig().set("shop.y", Double.valueOf(player.getLocation().getY()));
+						plugin.getConfig().set("shop.z", Double.valueOf(player.getLoc ation().getZ()));
+						plugin.saveConfig();
+
+						player.sendMessage(color(plugin.getConfig().getString("messages.successfully-set-shop")));
+
+						return true;
+					} else {
+						sender.sendMessage(color(plugin.getConfig().getString("messages.no-permission")));
+					}
+				} else if (args[0].equalsIgnoreCase("open")) {
+					if (sender.isOp() || sender.hasPermission("shop.open")) {
+						if (plugin.getConfig().getBoolean("messages.Is-The-Shop-Closed") == false) {
+							plugin.getConfig().set("messages.Is-The-Shop-Closed", true);
+							plugin.saveConfig();
+							sender.sendMessage(color("&aShop is now open!"));
+							return true;
+						} else if (plugin.getConfig().getBoolean("messages.Is-The-Shop-Closed") == true) {
+							sender.sendMessage(color("&6The shop is already open!"));
+							return true;
+						}
+					} else {
+						sender.sendMessage(color(plugin.getConfig().getString("messages.no-permission")));
+					}
+				} else if (args[0].equalsIgnoreCase("close")) {
+					if (sender.isOp() || sender.hasPermission("shop.close")) {
+						if (plugin.getConfig().getBoolean("messages.Is-The-Shop-Closed") == true) {
+							plugin.getConfig().set("messages.Is-The-Shop-Closed", false);
+							plugin.saveConfig();
+							sender.sendMessage(color("&cShop is now closed!"));
+							return true;
+						} else if (plugin.getConfig().getBoolean("messages.Is-The-Shop-Closed") == false) {
+							sender.sendMessage(color("&6The shop is already closed!"));
+							return true;
+						}
+					} else {
+						sender.sendMessage(color(plugin.getConfig().getString("messages.no-permission")));
+					}
+				} else if (args[0].equalsIgnoreCase("help")) {
+					if (sender.isOp() || sender.hasPermission("shop.help")) {
+						sender.sendMessage(new String[] { color("&3/shop set &7| &asets the shop location."),
+								color("&3/shop reload &7| &areloads the shop config."),
+								color("&3/shop open &7| &aopens the shop."),
+								color("&3/shop close &7| &acloses the shop.") });
+						return true;
+					} else {
+						sender.sendMessage(color(plugin.getConfig().getString("messages.no-permission")));
+					}
+				} else if (args[0].equalsIgnoreCase("reload")) {
+					if (sender.isOp() || sender.hasPermission("shop.admin")) {
+						plugin.reloadConfig();
+						sender.sendMessage(color("&aConfig has been reloaded!"));
+						return true;
+					} else {
+						sender.sendMessage(color(plugin.getConfig().getString("messages.no-permission")));
+					}
+				}
+			}
+			if (plugin.getConfig().getBoolean("messages.Is-The-Shop-Closed", true)) {
+				if (args.length < 1) {
+					if (sender.hasPermission("shop.teleport")) {
+						Player player = (Player) sender;
+
+						World w = Bukkit.getWorld(plugin.getConfig().getString("shop.world"));
+						double x = plugin.getConfig().getDouble("shop.x");
+						double y = plugin.getConfig().getDouble("shop.y");
+						double z = plugin.getConfig().getDouble("shop.z");
+
+						player.teleport(new Location(w, x, y, z));
+						player.sendMessage(color(plugin.getConfig().getString("messages.arrived-to-shop")));
+						return true;
+					} else {
+						sender.sendMessage(color(plugin.getConfig().getString("messages.no-permission")));
+					}
+				}
+			} else {
+				sender.sendMessage(color("&cThe shop is currently closed!"));
+			}
+		}
+		return false;
+	}
+
+	public String color(String message) {
+		return ChatColor.translateAlternateColorCodes('&', message);
+	}
