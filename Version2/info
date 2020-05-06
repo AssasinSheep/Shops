@@ -1,0 +1,2 @@
+The --> Shop Class is the same code as before it still handles all the shop commands etc. The playerdata class is for creating the custom yml,
+and the playershops is being updated to add commands for playershops
